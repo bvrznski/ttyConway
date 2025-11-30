@@ -1,6 +1,4 @@
 #include "restart.h"
-#include <iostream>
-
 bool arrayduplication(const std::vector<std::vector<bool>>& currentGrid, const std::vector<std::vector<std::vector<bool>>>& frames) {
     if (frames.size() < 10) return false;
     
