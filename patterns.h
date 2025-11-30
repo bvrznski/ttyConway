@@ -15,6 +15,10 @@ public:
     static std::vector<std::vector<bool>> getBreederPattern();
     static std::vector<std::vector<bool>> getTrainPattern();
     static std::vector<std::vector<bool>> getGunPattern();
+    static std::vector<std::vector<bool>> getPulsarPattern();
+    static std::vector<std::vector<bool>> getClockPattern();
+    static std::vector<std::vector<bool>> getBeaconPattern();
+    static std::vector<std::vector<bool>> getToadPattern();
 };
 
 #endif // PATTERNS_H

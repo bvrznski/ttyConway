@@ -4,8 +4,9 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -O2
 TARGET = conway
 
-SOURCES = main.cpp patterns.cpp restart.cpp
-HEADERS = patterns.h restart.h
+SOURCES = main.cpp patterns.cpp restart.cpp interactive.cpp
+
+HEADERS = patterns.h restart.h interactive.h
 
 $(TARGET): $(SOURCES) $(HEADERS)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SOURCES)

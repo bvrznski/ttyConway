@@ -49,9 +49,56 @@ This will run the standard Game of Life with random initialization.
 ./conway --breeder
 ./conway --train
 ./conway --gun
+./conway --pulsar
+./conway --clock
+./conway --beacon
+./conway --toad
 ```
 
 When a pattern flag is provided, the program will initialize with that specific pattern in a random location and orientation.
+
+### Loading Patterns from Files
+```bash
+./conway --pattern-file my_pattern.txt
+```
+Load a pattern definition from a file. The pattern file should be in the format specified in [pattern_format.md](pattern_format.md).
+
+Pattern files are text files with the following structure:
+1. First line: Width and Height (two integers separated by space)
+2. Subsequent lines: Grid representation where each character represents a cell
+   - `1` or `*` = live cell
+   - `0` or ` ` (space) = dead cell
+
+Example pattern file:
+```
+10 5
+0000000000
+0000110000
+0000110000
+0000000000
+0000000000
+```
+
+### Controlling Simulation Speed
+```bash
+./conway --speed 1
+./conway --speed 10
+```
+The speed parameter controls how fast the simulation runs, with values from 1 (slowest) to 10 (fastest). Default speed is 5.
+
+### Saving and Loading Grid States
+```bash
+./conway --save my_pattern.txt
+./conway --load my_pattern.txt
+```
+Save the current grid state to a file or load a grid state from a file. The saved files contain the grid dimensions and cell states in a simple text format.
+
+### Visualization Improvements
+```bash
+./conway --color
+./conway --mono
+```
+Enable colored display where live cells appear in green, or use monochrome display (default). The color option makes it easier to distinguish live cells from dead ones during simulation.
 
 ## Building
 

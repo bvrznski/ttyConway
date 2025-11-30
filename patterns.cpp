@@ -88,7 +88,7 @@ std::vector<std::vector<bool>> Patterns::getTrainPattern() {
 
 std::vector<std::vector<bool>> Patterns::getGunPattern() {
     return {
-        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false},
         {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false},
         {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, true, false, false, false, false, false, false, false, false, false},
         {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, true, false, false, false, false, false, false, false, false},
@@ -102,5 +102,61 @@ std::vector<std::vector<bool>> Patterns::getGunPattern() {
         {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
         {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
         {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false}
+    };
+}
+
+std::vector<std::vector<bool>> Patterns::getPulsarPattern() {
+    // Pulsar pattern (17x17), period 3
+    return {
+        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
+        {false, false, false, false, true, true, true, false, false, true, true, true, false, false, false, false, false},
+        {false, false, false, false, true, false, false, false, false, false, false, true, false, false, false, false, false},
+        {false, false, false, false, true, false, false, false, false, false, false, true, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
+        {false, false, false, false, true, false, false, false, false, false, false, true, false, false, false, false, false},
+        {false, false, false, false, true, false, false, false, false, false, false, true, false, false, false, false, false},
+        {false, false, false, false, true, true, true, false, false, true, true, true, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
+        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false}
+    };
+}
+
+std::vector<std::vector<bool>> Patterns::getClockPattern() {
+    // Simple clock pattern (period 4)
+    return {
+        {false, false, false, false, false},
+        {false, true, false, true, false},
+        {false, false, false, false, false},
+        {false, true, false, true, false},
+        {false, false, false, false, false}
+    };
+}
+
+std::vector<std::vector<bool>> Patterns::getBeaconPattern() {
+    // Beacon pattern (period 2)
+    return {
+        {false, false, false, false, false, false},
+        {false, true, true, false, false, false},
+        {false, true, true, false, false, false},
+        {false, false, false, true, true, false},
+        {false, false, false, true, true, false},
+        {false, false, false, false, false, false}
+    };
+}
+
+std::vector<std::vector<bool>> Patterns::getToadPattern() {
+    // Toad pattern (period 2)
+    return {
+        {false, false, false, false},
+        {false, false, true, true},
+        {false, true, true, false},
+        {false, false, false, false}
     };
 }
