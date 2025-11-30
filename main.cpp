@@ -265,6 +265,11 @@ bool loadGrid(std::vector<std::vector<bool>>& grid, int& width, int& height, con
             return false;
         }
         
+        // Trim trailing whitespace
+        line.erase(std::find_if(line.rbegin(), line.rend(), [](unsigned char ch) {
+            return !std::isspace(ch);
+        }).base(), line.end());
+        
         if (line.length() != static_cast<size_t>(width)) {
             std::cerr << "Error: Invalid file format - incorrect row length\n";
             file.close();
