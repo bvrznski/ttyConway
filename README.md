@@ -104,38 +104,178 @@ Enable colored display where live cells appear in green, or use monochrome displ
 
 To compile the program:
 ```bash
-g++ -std=c++17 -o conway main.cpp patterns.cpp restart.cpp
+g++ -std=c++17 -o conway main.cpp patterns.cpp restart.cpp interactive.cpp
+```
+
+## Installation
+
+The application can be compiled directly from source using a C++17 compatible compiler:
+
+### Using Make (if available)
+```bash
+make
+```
+This will compile the program using the provided Makefile with optimizations.
+
+### Manual compilation
+```bash
+g++ -std=c++17 -O2 -o conway main.cpp patterns.cpp restart.cpp interactive.cpp
+```
+This compiles the program manually with optimization flags.
+
+### Install to system
+To install the compiled binary to /usr/local/bin (requires sudo privileges):
+```bash
+make install
+```
+After installation, you can run the program from anywhere by simply typing:
+```bash
+conway
+```
+
+### Uninstall from system
+To remove the installed binary from /usr/local/bin:
+```bash
+make uninstall
+```
+
+### Clean build files
+To remove the compiled binary and any temporary files:
+```bash
+make clean
 ```
 
 ## Patterns
 
 ### Glider
 The smallest pattern that moves across the grid.
+```
+  *
+   *
+**
+```
 
 ### Spaceship
 A pattern that moves diagonally across the grid.
+```
+ *   *
+*    *
+*    *
+ * *** 
+```
 
 ### Rake
 A pattern that produces spaceships as it evolves.
+```
+     *       
+    *        
+***  **  **  
+***  **  **  
+            * 
+           *  
+```
 
 ### Reflector
 A pattern that reflects gliders back in the opposite direction.
+```
+        *
+      * * 
+      * * 
+        *
+```
 
 ### Replicator
 A pattern that replicates itself over time.
+```
+ * * * 
+*     *
+       *
+*     *
+ * * * 
+```
 
 ### Breeder
 A pattern that creates gliders and other patterns.
+```
+   * *
+  *   *
+ *     *
+*       *
+ *     *
+  *   *
+   * *
+```
 
 ### Train
 A pattern that moves horizontally across the grid.
+```
+    ***    
+   ***    
+         *
+```
 
 ### Gun
 The Gosper Glider Gun - a pattern that continuously produces gliders.
+```
+         **         
+        **          
+      **   **        
+     **   **         
+     **   **         
+      **   **        
+        **          
+         **         
+   *       *       
+  ***     ***      
+  ***     ***      
+   *       *       
+            *        
+           *         
+          *          
+         *           
+        *            
+       *             
+      *              
+     *               
+    *                
+   *                 
+  *                  
+ *                   
+*                    
+```
 
 ## Implementation Details
 
 The program uses a 40x20 grid for visualization. Patterns are randomly placed within the grid boundaries and can be rotated in 0, 90, 180, or 270 degrees.
+
+## Custom Pattern Files
+
+You can create your own pattern files using the format described in [pattern_format.md](pattern_format.md). Custom pattern files can be loaded using:
+```bash
+./conway --pattern-file my_custom_pattern.txt
+```
+
+## Enhancements
+
+### Interactive Mode
+Run the simulation in interactive mode to manually place cells:
+```bash
+./conway --interactive
+```
+
+### File Operations
+Save and load grid states:
+```bash
+./conway --save my_pattern.txt
+./conway --load my_pattern.txt
+```
+
+### Display Options
+Enable colored display for better visualization:
+```bash
+./conway --color
+./conway --mono
+```
 
 ## Requirements
 

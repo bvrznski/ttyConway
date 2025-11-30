@@ -5,12 +5,18 @@
 #include <cstring>
 #include <algorithm>
 #include <fstream>
+#include <sys/ioctl.h>
+#include <unistd.h>
+#include <termios.h>
 #include "patterns.h"
-#include "restart.h"
 #include "interactive.h"
 
-// Game of Life implementation with pattern support
-
+/**
+ * @brief Conway's Game of Life implementation
+ * 
+ * This class implements the cellular automaton known as Conway's Game of Life.
+ * It supports pattern initialization, random initialization, and various simulation features.
+ */
 class GameOfLife {
 private:
     std::vector<std::vector<bool>> grid;
@@ -21,6 +27,24 @@ private:
     int liveCellCount;    // Track number of live cells
 
 public:
+    // Constructor that gets terminal dimensions
+    GameOfLife() {
+        // Get terminal dimensions
+        struct winsize w;
+        ioctl(0, TIOCGWINSZ, &w);
+        height = w.ws_row - 1;  // Leave one line for prompt
+        width = w.ws_col;
+        
+        // Ensure minimum size
+        if (height < 10) height = 10;
+        if (width < 10) width = 10;
+        
+        grid.resize(height, std::vector<bool>(width, false));
+        nextGrid.resize(height, std::vector<bool>(width, false));
+        generationCount = 0;
+        liveCellCount = 0;
+    }
+    
     GameOfLife(int w, int h) : width(w), height(h), rng(std::random_device{}()), generationCount(0), liveCellCount(0) {
         grid.resize(height, std::vector<bool>(width, false));
         nextGrid.resize(height, std::vector<bool>(width, false));
@@ -293,6 +317,16 @@ bool loadGrid(std::vector<std::vector<bool>>& grid, int& width, int& height, con
     return true;
 }
 
+/**
+ * @brief Main function for Conway's Game of Life implementation
+ * 
+ * This is the entry point of the program that handles command line arguments,
+ * initializes the game based on provided parameters, and runs the simulation loop.
+ * 
+ * @param argc Number of command line arguments
+ * @param argv Array of command line argument strings
+ * @return Exit status of the program
+ */
 int main(int argc, char* argv[]) {
     int width = 40;
     int height = 20;
@@ -357,7 +391,7 @@ int main(int argc, char* argv[]) {
         }
     }
     
-    GameOfLife game(width, height);
+    GameOfLife game;
     
     // Handle load operation first, if specified
     if (!loadFile.empty()) {
@@ -374,6 +408,8 @@ int main(int argc, char* argv[]) {
     // Check what arguments are provided
     if (argc == 1) {
         // No arguments - run normal Game of Life with random initialization
+        // Use the terminal-sized constructor
+        game = GameOfLife();
         std::cout << "Running standard Game of Life with random initialization.\n";
         game.randomize(0.2);
     } else {
@@ -527,11 +563,23 @@ int main(int argc, char* argv[]) {
                 std::cout << "Initializing with Train pattern.\n";
                 game.initializeWithPattern(Patterns::getTrainPattern());
             } else if (patternArg == "--gun") {
+                // Check for valid pattern size to prevent segmentation fault
+                auto gun = Patterns::getGunPattern();
+                if (gun.empty() || gun[0].empty()) {
+                    std::cerr << "Error: Gun pattern is invalid\n";
+                    return 1;
+                }
                 std::cout << "Initializing with Gun pattern.\n";
-                game.initializeWithPattern(Patterns::getGunPattern());
+                game.initializeWithPattern(gun);
             } else if (patternArg == "--pulsar") {
+                // Check for valid pattern size to prevent segmentation fault
+                auto pulsar = Patterns::getPulsarPattern();
+                if (pulsar.empty() || pulsar[0].empty()) {
+                    std::cerr << "Error: Pulsar pattern is invalid\n";
+                    return 1;
+                }
                 std::cout << "Initializing with Pulsar pattern.\n";
-                game.initializeWithPattern(Patterns::getPulsarPattern());
+                game.initializeWithPattern(pulsar);
             } else if (patternArg == "--clock") {
                 std::cout << "Initializing with Clock pattern.\n";
                 game.initializeWithPattern(Patterns::getClockPattern());
@@ -545,32 +593,20 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // Main game loop - with pattern checking and restart functionality
+    // Main game loop
     if (argc != 2 || std::string(argv[1]) != "--interactive") {
         std::cout << "Press Enter to start the simulation (or Ctrl+C to exit).\n";
         std::cin.get();
         
-        // Keep track of last 10 frames for pattern detection
-        std::vector<std::vector<std::vector<bool>>> frames;
-        
         int generation = 0;
-        while (generation < 1000) {  // Prevent infinite loop, run up to 1000 generations
+        const int maxGenerations = 1000; // Prevent infinite loop
+        
+        while (generation < maxGenerations) {
             // Update statistics before displaying
             game.updateStatistics();
             
             std::cout << "\nGeneration " << game.getGeneration() << " | Live Cells: " << game.getLiveCellCount() << "\n";
             game.display(useColor);
-            
-            // Check for repeating patterns
-            if (arrayduplication(game.getGrid(), frames)) {
-                // Pattern repeated - restart simulation
-                std::cout << "Pattern repeated - restarting simulation.\n";
-                game.randomize(0.2);  // Reinitialize with random pattern
-                frames.clear();      // Clear the frame history
-                game.updateStatistics(); // Reset statistics after restart
-            } else {
-                addFrame(game.getGrid(), frames);
-            }
             
             game.computeNextGeneration();
             

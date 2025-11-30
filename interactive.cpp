@@ -2,6 +2,12 @@
 #include <iostream>
 #include <limits>
 
+/**
+ * @brief Display the current grid with coordinates
+ * 
+ * Shows the grid with row and column numbers for easier cell placement.
+ * Column numbers are displayed at the top, and row numbers on the left.
+ */
 void InteractiveMode::displayGrid() {
     // Print column numbers
     std::cout << "   ";
@@ -30,6 +36,11 @@ void InteractiveMode::displayGrid() {
     std::cout << "\n";
 }
 
+/**
+ * @brief Show interactive mode instructions
+ * 
+ * Displays help information about how to use interactive mode commands.
+ */
 void InteractiveMode::showInstructions() {
     std::cout << "Interactive Mode Instructions:\n";
     std::cout << "Commands:\n";
@@ -45,12 +56,26 @@ void InteractiveMode::showInstructions() {
     std::cout << "\n";
 }
 
+/**
+ * @brief Toggle cell state at specified position
+ * 
+ * Changes the state of a cell from alive to dead or vice versa.
+ * Validates that coordinates are within grid boundaries.
+ * 
+ * @param x X coordinate of the cell
+ * @param y Y coordinate of the cell
+ */
 void InteractiveMode::toggleCell(int x, int y) {
     if (x >= 0 && x < width && y >= 0 && y < height) {
         grid[y][x] = !grid[y][x];
     }
 }
 
+/**
+ * @brief Clear the entire grid
+ * 
+ * Sets all cells to dead state.
+ */
 void InteractiveMode::clearGrid() {
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
@@ -59,6 +84,13 @@ void InteractiveMode::clearGrid() {
     }
 }
 
+/**
+ * @brief Get user input for placing cells
+ * 
+ * Allows users to specify coordinates to place live cells on the grid.
+ * Coordinates are entered in format like "5,10 12,8".
+ * The method continues until user types 'done'.
+ */
 void InteractiveMode::placeCells() {
     std::cout << "Enter coordinates to place cells (e.g., '5,10 12,8'):\n";
     std::cout << "Type 'done' when finished.\n";
@@ -78,6 +110,7 @@ void InteractiveMode::placeCells() {
             // Find comma
             size_t commaPos = input.find(',', pos);
             if (commaPos == std::string::npos) {
+                std::cout << "Invalid coordinate format. Please enter numbers like '5,10'.\n";
                 break;
             }
             
