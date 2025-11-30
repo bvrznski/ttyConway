@@ -81,23 +81,30 @@ void InteractiveMode::placeCells() {
                 break;
             }
             
-            // Extract x coordinate
-            int x = std::stoi(input.substr(pos, commaPos - pos));
-            
-            // Find end of number for y coordinate
-            size_t nextSpace = input.find(' ', commaPos);
-            if (nextSpace == std::string::npos) {
-                nextSpace = input.length();
-            }
-            
-            // Extract y coordinate
-            int y = std::stoi(input.substr(commaPos + 1, nextSpace - commaPos - 1));
-            
-            toggleCell(x, y);
-            
-            pos = nextSpace;
-            if (pos < input.length()) {
-                pos++; // Skip the space
+            // Extract x and y coordinates with error handling
+            try {
+                int x = std::stoi(input.substr(pos, commaPos - pos));
+
+                // Find end of number for y coordinate
+                size_t nextSpace = input.find(' ', commaPos);
+                if (nextSpace == std::string::npos) {
+                    nextSpace = input.length();
+                }
+
+                int y = std::stoi(input.substr(commaPos + 1, nextSpace - commaPos - 1));
+
+                toggleCell(x, y);
+
+                pos = nextSpace;
+                if (pos < input.length()) {
+                    pos++; // Skip the space
+                }
+            } catch (const std::invalid_argument&) {
+                std::cout << "Invalid coordinate format. Please enter numbers like '5,10'.\n";
+                break;
+            } catch (const std::out_of_range&) {
+                std::cout << "Coordinate value out of range. Please enter smaller numbers.\n";
+                break;
             }
         }
         
