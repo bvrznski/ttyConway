@@ -130,7 +130,7 @@ public:
         if (useColor) {
             // ANSI color codes for colored output
             const char* liveCell = "\033[32m*\033[0m";  // Green color for live cells
-            const char* deadCell = " ";                 // White color for dead cells
+            const char* deadCell = " ";                 // No color for dead cells
             
             for (int y = 0; y < height; ++y) {
                 for (int x = 0; x < width; ++x) {
