@@ -44,10 +44,27 @@ The Game of Life follows these rules:
 
 ## Building and Running
 
+You can build the project using either of the following methods:
+
+### Using Make (recommended)
+```bash
+make
+./conway
+```
+
+### Using g++
 ```bash
 g++ -o conway main.cpp
 ./conway
 ```
+
+## Makefile
+
+This project includes a Makefile that provides convenient build targets:
+
+- `make` - Compiles the program with optimization flags
+- `make clean` - Removes the compiled binary
+- `make install` - Installs the binary to `/usr/local/bin/`
 
 ## License
 
