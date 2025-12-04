@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <cstdlib>
 #include <sys/ioctl.h>
+#include <cstring>
 
 using namespace std;
 
@@ -14,9 +15,10 @@ private:
     int rows, cols;
     int historyIndex;
     int duplicateCount;
+    int chance; // Store the chance value
     
 public:
-    GameOfLife() {
+    GameOfLife(int initChance = 50) : chance(initChance) {
         // Get terminal dimensions
         struct winsize w;
         ioctl(0, TIOCGWINSZ, &w);
@@ -45,34 +47,11 @@ public:
         // Fill with higher density - about 40% alive cells
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                setCell(i, j, rand() % 100 < 40);  // 40% chance of being alive
+                setCell(i, j, rand() % 100 < chance);  // Use stored chance value
             }
         }
     }
     
-    // Add some interesting patterns
-    void addInterestingPatterns() {
-        // Add a glider pattern
-        setCell(5, 5, true);
-        setCell(6, 6, true);
-        setCell(7, 4, true);
-        setCell(7, 5, true);
-        setCell(7, 6, true);
-        
-        // Add a small oscillator
-        setCell(10, 10, true);
-        setCell(10, 11, true);
-        setCell(10, 12, true);
-        
-        // Add some random cells to make it more interesting
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (rand() % 100 < 15) {  // 15% chance
-                    setCell(i, j, true);
-                }
-            }
-        }
-    }
     
     int countNeighbors(int row, int col) {
         int count = 0;
@@ -174,8 +153,8 @@ public:
                 grid[i][j] = ' ';
             }
         }
-        // Reinitialize with new random pattern (denser)
-        addInterestingPatterns();
+        // Reinitialize with new random pattern using the same chance
+        randomize();
         // Clear history
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < rows; j++) {
@@ -212,15 +191,31 @@ public:
     int getCols() const { return cols; }
 };
 
-int main() {
-    GameOfLife game;
+int main(int argc, char* argv[]) {
+    // Parse command line arguments
+    int chance = 50; // default chance is 50%
     
-    // Add interesting patterns
-    game.addInterestingPatterns();
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--chance") == 0 || strcmp(argv[i], "-c") == 0) {
+            if (i + 1 < argc) {
+                chance = atoi(argv[i + 1]);
+                i++; // Skip next argument
+            } else {
+                cout << "Error: --chance requires an integer argument" << endl;
+                return 1;
+            }
+        }
+    }
+    
+    GameOfLife game(chance);
+    
+    // Initialize with random pattern using the specified chance
+    game.randomize();
     
     cout << "Conway's Game of Life - Duplicate Pattern Detection" << endl;
     cout << "Colors: White = Appears on screen, Green = Stays on screen, Red = Disappears from screen" << endl;
     cout << "Features: 2-duplicate-pattern detection + automatic restart" << endl;
+    cout << "Chance of cell being alive: " << chance << "%" << endl;
     cout << "Press Ctrl+C to exit" << endl;
     usleep(1000000); // Wait 1 second before starting
     
